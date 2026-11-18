@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: connecto-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+# Third-party providers are disabled until configured.
+agora:
+  app-id: ${AGORA_APP_ID:}
+  app-certificate: ${AGORA_APP_CERTIFICATE:}
+  token-expiration-in-seconds: 3600
+
+# Security / JWT
+jwt:
+  secret: ${JWT_SECRET:}
+  expiration-ms: 2592000000 # 30 days
+
+google:
+  play:
+    public-license-key: ${GOOGLE_PLAY_PUBLIC_LICENSE_KEY:}
+
+integrations:
+  mock:
+    voice: false
+    play-billing: false
+
+# Platform Commission
+platform:
+  commission-percentage: 40.0 # 40% platform cut, 60% listener earning

@@ -1,0 +1,42 @@
+# Flutter SDK (stored locally in repo)
+/flutter/
+
+# Maven / Java
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Gradle / Android
+**/.gradle/
+**/build/
+**/local.properties
+**/GeneratedPluginRegistrant.*
+.gradle/
+build/
+
+# Dart / Flutter
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/pubspec.lock
+
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+scratch/
+tmp/
