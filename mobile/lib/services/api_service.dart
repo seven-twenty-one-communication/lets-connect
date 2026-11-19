@@ -3,10 +3,31 @@ import 'package:http/http.dart' as http;
 import '../models/category_model.dart';
 import '../models/listener_model.dart';
 import '../models/call_session_model.dart';
+import 'session_store.dart';
 
 class ApiService {
   // Use 10.0.2.2 for Android Emulator, or your local machine IP for physical device
-  static const String baseUrl = 'http://10.0.2.2:8080/api';
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://10.0.2.2:8080/api',
+  );
+  static final SessionStore _sessionStore = SessionStore();
+
+  static Future<Map<String, String>> _authenticatedHeaders() async {
+    final session = await _sessionStore.readSession();
+    if (session == null) {
+      throw StateError('Authentication is required for this request');
+    }
+
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${session.accessToken}',
+    };
+  }
+
+  static Future<AppSession?> currentSession() => _sessionStore.readSession();
+
+  static Future<void> clearSession() => _sessionStore.clearSession();
 
   static Future<bool> sendOtp(String phoneNumber) async {
     try {
@@ -21,7 +42,7 @@ class ApiService {
     }
   }
 
-  static Future<Map<String, dynamic>?> verifyOtp(String phoneNumber, String otp) async {
+  static Future<AppSession?> verifyOtp(String phoneNumber, String otp) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/verify-otp'),
@@ -33,7 +54,10 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body) as Map<String, dynamic>;
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final session = AppSession.fromAuthResponse(data);
+        await _sessionStore.saveSession(session);
+        return session;
       }
       return null;
     } catch (e) {
@@ -43,7 +67,10 @@ class ApiService {
 
   static Future<List<CategoryModel>> getCategories() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/categories'));
+      final response = await http.get(
+        Uri.parse('$baseUrl/categories'),
+        headers: await _authenticatedHeaders(),
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         return data.map((json) => CategoryModel.fromJson(json)).toList();
@@ -60,7 +87,10 @@ class ApiService {
       if (categoryId != null) url += 'categoryId=$categoryId&';
       if (isOnline != null) url += 'isOnline=$isOnline&';
 
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(url),
+        headers: await _authenticatedHeaders(),
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         return data.map((json) => ListenerModel.fromJson(json)).toList();
@@ -79,7 +109,7 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/calls/initiate'),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _authenticatedHeaders(),
         body: jsonEncode({
           'callerId': callerId,
           'listenerId': listenerId,
@@ -99,7 +129,10 @@ class ApiService {
 
   static Future<CallTokenModel?> acceptCall(String callId) async {
     try {
-      final response = await http.post(Uri.parse('$baseUrl/calls/$callId/accept'));
+      final response = await http.post(
+        Uri.parse('$baseUrl/calls/$callId/accept'),
+        headers: await _authenticatedHeaders(),
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return CallTokenModel.fromJson(data);
@@ -112,7 +145,10 @@ class ApiService {
 
   static Future<bool> rejectCall(String callId) async {
     try {
-      final response = await http.post(Uri.parse('$baseUrl/calls/$callId/reject'));
+      final response = await http.post(
+        Uri.parse('$baseUrl/calls/$callId/reject'),
+        headers: await _authenticatedHeaders(),
+      );
       return response.statusCode == 200;
     } catch (e) {
       return false;
@@ -121,7 +157,10 @@ class ApiService {
 
   static Future<bool> endCall(String callId) async {
     try {
-      final response = await http.post(Uri.parse('$baseUrl/calls/$callId/end'));
+      final response = await http.post(
+        Uri.parse('$baseUrl/calls/$callId/end'),
+        headers: await _authenticatedHeaders(),
+      );
       return response.statusCode == 200;
     } catch (e) {
       return false;
@@ -130,7 +169,10 @@ class ApiService {
 
   static Future<int> getCoinBalance(String userId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/wallet/$userId/balance'));
+      final response = await http.get(
+        Uri.parse('$baseUrl/wallet/$userId/balance'),
+        headers: await _authenticatedHeaders(),
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         return data['coinBalance'] as int? ?? 0;
@@ -151,7 +193,7 @@ class ApiService {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/wallet/verify-play-purchase'),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _authenticatedHeaders(),
         body: jsonEncode({
           'userId': userId,
           'signedData': signedData,
@@ -168,7 +210,10 @@ class ApiService {
 
   static Future<void> addTestCoins(String userId, int coins) async {
     try {
-      await http.post(Uri.parse('$baseUrl/wallet/$userId/add-test-coins?coins=$coins'));
+      await http.post(
+        Uri.parse('$baseUrl/wallet/$userId/add-test-coins?coins=$coins'),
+        headers: await _authenticatedHeaders(),
+      );
     } catch (_) {}
   }
 }

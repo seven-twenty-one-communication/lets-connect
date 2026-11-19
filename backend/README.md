@@ -1,6 +1,6 @@
-# Connecto backend
+# LetsConnect backend
 
-Spring Boot REST and STOMP backend for Connecto-style voice conversations. The local `dev` profile uses an in-memory H2 database and development-only substitutes for SMS OTP, Agora tokens, and Play purchases.
+Spring Boot REST and STOMP backend for LetsConnect voice conversations. The local `dev` profile uses an in-memory H2 database and development-only substitutes for SMS OTP, Agora tokens, and Play purchases.
 
 ## Run locally
 

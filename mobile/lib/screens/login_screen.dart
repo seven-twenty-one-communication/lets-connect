@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../theme/app_colors.dart';
 import 'home_screen.dart';
@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     final fullNumber = phone.startsWith("+") ? phone : "+91$phone";
     final success = await ApiService.sendOtp(fullNumber);
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
     if (success) {
@@ -71,14 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
     final fullNumber = phone.startsWith("+") ? phone : "+91$phone";
-    final result = await ApiService.verifyOtp(fullNumber, otp);
+    final session = await ApiService.verifyOtp(fullNumber, otp);
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
-    if (result != null) {
-      // Login successful -> navigate to HomeScreen
+    if (session != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => HomeScreen(session: session)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -139,27 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Welcome Bonus Tag
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.coins.withValues(alpha: 0.3)),
-                ),
-                child: const Row(
-                  children: [
-                    Text("🎁", style: TextStyle(fontSize: 18)),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        "New users get 20 Free Welcome Coins on login",
-                        style: TextStyle(color: AppColors.coins, fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 36),
 
               // Phone Number Input or OTP Input

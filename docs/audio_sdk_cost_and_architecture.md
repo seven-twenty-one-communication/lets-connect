@@ -11,7 +11,7 @@
 
 ---
 
-## 2. Why Agora is the Best Pick for Your Connecto App
+## 2. Why Agora is the Best Pick for LetsConnect
 
 1. **Cheapest Managed Voice Tier:** At **$0.99 per 1,000 minutes**, Agora is significantly cheaper than ZegoCloud and Twilio.
 2. **Generous Free Tier:** You get **10,000 free audio minutes every single month**. For your MVP, testing, and first 100–300 users in January 2027, your voice infrastructure bill will be **$0 / month**.

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.connecto.app">
+    package="com.letsconnect.app">
 
     <!-- VoIP & Agora Audio Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-    <!-- Lockscreen Ringing & Background Call Permissions (Connecto CallKit parity) -->
+    <!-- Lockscreen ringing and background call permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -21,7 +21,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
-        android:label="Emotional Support App"
+        android:label="LetsConnect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

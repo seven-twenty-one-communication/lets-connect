@@ -12,7 +12,7 @@ connecto-calling-app/
 │   ├── schema.sql         # Production PostgreSQL schema (Wallets, Sessions, KYC, Helplines)
 │   └── seed_data.sql       # Categories, Google Play coin packs, Crisis helplines
 ├── backend/               # Spring Boot 3.3.5 (Java 21)
-│   ├── src/main/java/com/connecto/app/
+│   ├── src/main/java/com/letsconnect/app/
 │   │   ├── config/        # Security & CORS configuration
 │   │   ├── controller/    # CallController, ListenerController, CategoryController, WalletController
 │   │   ├── model/         # User, ListenerProfile, Category, Wallet, CallSession
@@ -20,7 +20,7 @@ connecto-calling-app/
 │   │   └── service/       # AgoraTokenService, CallBillingService (60s atomic loop), WalletService
 │   ├── pom.xml
 │   └── src/main/resources/application.yml
-├── mobile/                # Flutter Mobile Application
+├── mobile/                # Flutter Android Application
 │   ├── lib/
 │   │   ├── models/        # CategoryModel, ListenerModel, CallTokenModel
 │   │   ├── screens/       # HomeScreen (Discovery feed), CallScreen (Active voice call)
@@ -55,15 +55,17 @@ mvn spring-boot:run
 ### 3. Flutter Mobile App
 ```bash
 cd mobile
-flutter pub get
-flutter run
+..\flutter\bin\flutter.bat pub get
+..\flutter\bin\flutter.bat run
 ```
 
 ---
 
-## 🏷️ Rebranding Note
-The codebase is structured to be completely brand-neutral. Once you finalize your app name (e.g., *Sukoon*, *Suno*, *Mitra*, etc.), you only need to update the display strings in `pubspec.yaml` and `main.dart`.
+## App identity
+
+The app is branded **LetsConnect**. Its Android application ID is
+`com.letsconnect.app`, and its Flutter package name is `lets_connect_app`.
 
 ## Technical Blueprint
 
-The evidence-labelled product requirements, architecture, API/database/security contracts, and implementation phase specifications are in [docs/connecto](docs/connecto/README.md). These documents distinguish verified public claims from unverified behavior and proposed features; they do not imply that planned functionality is already implemented.
+The evidence-labelled product requirements, architecture, API/database/security contracts, and implementation phase specifications are in [docs/LetsConnect](docs/LetsConnect/README.md). These documents distinguish verified public claims from unverified behavior and proposed features; they do not imply that planned functionality is already implemented.

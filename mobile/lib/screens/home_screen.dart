@@ -1,27 +1,27 @@
-import 'package:material_ui/material_ui.dart';
-import '../models/category_model.dart';
+import 'package:flutter/material.dart';
 import '../models/listener_model.dart';
+import '../models/call_session_model.dart';
 import '../services/api_service.dart';
+import '../services/session_store.dart';
 import '../theme/app_colors.dart';
 import 'call_screen.dart';
 import 'chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.session});
+
+  final AppSession session;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<CategoryModel> _categories = [];
   List<ListenerModel> _listeners = [];
   int? _selectedCategoryId;
-  int _coinBalance = 150;
+  int _coinBalance = 0;
   bool _isLoading = true;
   String? _currentlyPlayingVoiceIntro;
-
-  final String _currentCallerId = "11111111-1111-1111-1111-111111111111";
 
   @override
   void initState() {
@@ -31,64 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadInitialData() async {
     setState(() => _isLoading = true);
-    final categories = await ApiService.getCategories();
     final listeners = await ApiService.getListeners();
 
     setState(() {
-      _categories = categories;
-      _listeners = listeners.isNotEmpty ? listeners : _getDemoListeners();
+      _listeners = listeners;
       _isLoading = false;
     });
-  }
-
-  List<ListenerModel> _getDemoListeners() {
-    return [
-      ListenerModel(
-        id: '1',
-        userId: '22222222-2222-2222-2222-222222222222',
-        nickname: 'Aarav (Warm Ear)',
-        avatarUrl: 'https://api.dicebear.com/7.x/bottts/png?seed=Aarav',
-        bio: 'Here to listen without judgment. Breakups, late night thoughts, or life stress.',
-        voiceIntroUrl: 'https://sample-audio.com/intro1.mp3',
-        pricePerMinuteCoins: 10,
-        isOnline: true,
-        isOnCall: false,
-        ratingAvg: 4.9,
-        totalReviews: 840,
-        totalCallsCompleted: 1120,
-        languages: ['Hindi', 'English'],
-      ),
-      ListenerModel(
-        id: '2',
-        userId: '33333333-3333-3333-3333-333333333333',
-        nickname: 'Priya (Soul Guide)',
-        avatarUrl: 'https://api.dicebear.com/7.x/bottts/png?seed=Priya',
-        bio: 'Exam pressure or career anxiety? Let us talk it through together.',
-        voiceIntroUrl: 'https://sample-audio.com/intro2.mp3',
-        pricePerMinuteCoins: 12,
-        isOnline: true,
-        isOnCall: false,
-        ratingAvg: 5.0,
-        totalReviews: 520,
-        totalCallsCompleted: 750,
-        languages: ['Hindi', 'English', 'Punjabi'],
-      ),
-      ListenerModel(
-        id: '3',
-        userId: '44444444-4444-4444-4444-444444444444',
-        nickname: 'Rohan (Calm Voice)',
-        avatarUrl: 'https://api.dicebear.com/7.x/bottts/png?seed=Rohan',
-        bio: 'Cannot sleep? Vent out your racing thoughts.',
-        voiceIntroUrl: 'https://sample-audio.com/intro3.mp3',
-        pricePerMinuteCoins: 8,
-        isOnline: false,
-        isOnCall: false,
-        ratingAvg: 4.8,
-        totalReviews: 310,
-        totalCallsCompleted: 420,
-        languages: ['Hindi', 'English'],
-      ),
-    ];
   }
 
   void _toggleVoicePreview(ListenerModel listener) {
@@ -123,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(
         builder: (_) => ChatScreen(
           listener: listener,
-          currentUserId: _currentCallerId,
+          currentUserId: widget.session.userId,
         ),
       ),
     );
@@ -144,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     final callToken = await ApiService.initiateCall(
-      callerId: _currentCallerId,
+      callerId: widget.session.userId,
       listenerId: listener.userId,
       categoryId: _selectedCategoryId,
     );

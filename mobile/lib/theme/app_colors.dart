@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class AppColors {
   // Cozy Midnight Dark Theme (Calming & Non-judgmental)
