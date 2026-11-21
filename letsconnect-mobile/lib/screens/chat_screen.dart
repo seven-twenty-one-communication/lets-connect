@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<Map<String, dynamic>> _messages = [
     {
       'isMe': false,
-      'text': 'Hi there! I am here to listen. You can share whatever is on your mind without any judgment.',
+      'text': 'Hey there! Nice to connect with you. What are you up to today?',
       'time': 'Just now',
     },
   ];
@@ -58,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         _messages.add({
           'isMe': false,
-          'text': 'I understand how tough that can feel. Take your time, I am listening.',
+          'text': 'Haha that sounds awesome! Tell me more about it.',
           'time': 'Just now',
         });
       });
@@ -205,7 +205,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         controller: _messageController,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          hintText: "Type a supportive message...",
+                          hintText: "Type a friendly message...",
                           hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
                           border: InputBorder.none,
                         ),

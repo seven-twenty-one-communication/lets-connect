@@ -253,11 +253,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: const Row(
                       children: [
-                        Icon(Icons.shield_outlined, color: AppColors.primaryLight, size: 20),
+                        Icon(Icons.people_alt_outlined, color: AppColors.primaryLight, size: 20),
                         SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            "Safe space for peer venting. For psychiatric emergencies, dial 14416 (Tele-MANAS).",
+                            "Meet new people, talk 1-on-1, and make genuine friends across India. 100% anonymous & secure.",
                             style: TextStyle(color: AppColors.textSecondary, fontSize: 11),
                           ),
                         ),
@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 16),
 
                   const Text(
-                    "What is on your mind?",
+                    "What would you like to talk about?",
                     style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
@@ -277,17 +277,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         _buildCategoryChip("All Topics", null),
-                        _buildCategoryChip("Heartbreak & Breakup", 1),
-                        _buildCategoryChip("Late Night Venting", 2),
-                        _buildCategoryChip("Career & Exams", 3),
-                        _buildCategoryChip("Loneliness", 4),
+                        _buildCategoryChip("Casual Chit-Chat", 1),
+                        _buildCategoryChip("Late Night Talks", 2),
+                        _buildCategoryChip("Music & Movies", 3),
+                        _buildCategoryChip("Gaming & Hobbies", 4),
+                        _buildCategoryChip("Life & Friendships", 5),
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 20),
                   const Text(
-                    "Available Listeners",
+                    "Discover Friends",
                     style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),

@@ -110,7 +110,7 @@ public class CallController {
                 session,
                 caller.getNickname(),
                 caller.getAvatarUrl(),
-                category != null ? category.getName() : "General Venting"
+                category != null ? category.getName() : "Casual Chit-Chat"
         );
 
         CallTokenResponse response = CallTokenResponse.builder()

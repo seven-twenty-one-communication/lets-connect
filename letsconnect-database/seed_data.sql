@@ -2,15 +2,15 @@
 -- CONNECTO APP SEED DATA: Categories, Coin Packages, and Emergency Helplines
 -- ============================================================================
 
--- 1. EMOTIONAL SUPPORT CATEGORIES
+-- 1. SOCIAL FRIENDSHIP & INTEREST CATEGORIES
 INSERT INTO categories (name, slug, description, display_order, is_active) VALUES
-('Breakup & Heartbreak', 'breakup-heartbreak', 'Talk to someone who understands the pain of separation and moving on.', 1, true),
-('Late Night Thoughts', 'late-night-thoughts', 'Cannot sleep? Need a friendly companion to talk your mind out.', 2, true),
-('Career & Exam Stress', 'career-exam-stress', 'Dealing with workplace pressure, job hunts, or academic burnout.', 3, true),
-('Loneliness & Companionship', 'loneliness-companionship', 'When you feel alone and simply want a listening, non-judgmental ear.', 4, true),
-('Overthinking & Anxiety', 'overthinking-anxiety', 'Vent out your racing thoughts and find grounded reassurance.', 5, true),
-('Family & Marriage Advice', 'family-marriage-advice', 'Guidance and peer perspectives on family or domestic friction.', 6, true),
-('Spiritual & Daily Motivation', 'motivation-positivity', 'Start your day with positive energy and purposeful conversations.', 7, true)
+('Casual Chit-Chat', 'casual-chat', 'Lighthearted, fun conversations with friendly people.', 1, true),
+('Late Night Talks', 'late-night-talks', 'Cannot sleep? Find a night-owl companion to talk your mind out.', 2, true),
+('Music & Movies', 'music-movies', 'Discuss your favorite tracks, latest movies, shows and pop culture.', 3, true),
+('Gaming & Hobbies', 'gaming-hobbies', 'Connect over online gaming, tech, creative hobbies and interests.', 4, true),
+('Life & Friendships', 'life-friendships', 'Share everyday life stories, college/office banter, and meet genuine friends.', 5, true),
+('Career & Ambitions', 'career-ambitions', 'Talk about professional journeys, startups, and career dreams.', 6, true),
+('Dating & Relationship Banter', 'relationship-banter', 'Friendly advice and perspectives on crushes, dating, and relationships.', 7, true)
 ON CONFLICT (slug) DO NOTHING;
 
 -- 2. GOOGLE PLAY COIN PACKAGES

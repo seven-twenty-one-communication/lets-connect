@@ -15,16 +15,16 @@ void main() {
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  runApp(const EmotionalSupportApp());
+  runApp(const LetsConnectApp());
 }
 
-class EmotionalSupportApp extends StatelessWidget {
-  const EmotionalSupportApp({super.key});
+class LetsConnectApp extends StatelessWidget {
+  const LetsConnectApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'LetsConnect',
+      title: 'LetsConnect – Online Friendship',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

@@ -27,11 +27,12 @@ public class DevCatalogSeeder implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         if (categoryRepository.count() == 0) {
             categoryRepository.saveAll(List.of(
-                    category("Breakup Recovery", "breakup-recovery", 1),
-                    category("Relationship Advice", "relationship-advice", 2),
-                    category("Work Stress", "work-stress", 3),
-                    category("Loneliness Support", "loneliness-support", 4),
-                    category("Everyday Conversation", "everyday-conversation", 5)
+                    category("Casual Chit-Chat", "casual-chat", 1),
+                    category("Late Night Talks", "late-night-talks", 2),
+                    category("Music & Movies", "music-movies", 3),
+                    category("Gaming & Hobbies", "gaming-hobbies", 4),
+                    category("Life & Friendships", "life-friendships", 5),
+                    category("Career & College", "career-college", 6)
             ));
         }
         if (giftRepository.count() == 0) {

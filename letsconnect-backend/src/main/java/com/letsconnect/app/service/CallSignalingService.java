@@ -33,7 +33,7 @@ public class CallSignalingService {
                 "channelName", session.getChannelName(),
                 "callerNickname", callerNickname,
                 "callerAvatar", callerAvatar,
-                "categoryName", categoryName != null ? categoryName : "General Venting",
+                "categoryName", categoryName != null ? categoryName : "Casual Chit-Chat",
                 "ratePerMinuteCoins", session.getRatePerMinuteCoins(),
                 "timestamp", System.currentTimeMillis()
         );
