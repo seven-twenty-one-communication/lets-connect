@@ -1,0 +1,16 @@
+export const Colors = {
+  background: '#0B0F19',
+  surface: '#151D2F',
+  surfaceLight: '#1E293B',
+  primary: '#7C3AED',
+  primaryLight: '#A78BFA',
+  secondary: '#EC4899',
+  coins: '#F59E0B',
+  online: '#10B981',
+  busy: '#EF4444',
+  offline: '#64748B',
+  textPrimary: '#F8FAFC',
+  textSecondary: '#94A3B8',
+  textMuted: '#64748B',
+  border: '#334155',
+};
