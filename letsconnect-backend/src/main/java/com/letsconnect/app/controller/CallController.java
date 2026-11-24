@@ -30,7 +30,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/calls")
+@RequestMapping({"/api/calls", "/api/v1/calls"})
 @RequiredArgsConstructor
 public class CallController {
 
@@ -45,7 +45,7 @@ public class CallController {
     private final WalletService walletService;
     private final AuthenticatedUser authenticatedUser;
 
-    @PostMapping("/initiate")
+    @PostMapping({"", "/initiate"})
     @Transactional
     public ResponseEntity<?> initiateCall(@Valid @RequestBody CallInitiateRequest request) {
         authenticatedUser.require(request.getCallerId());

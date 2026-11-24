@@ -1,6 +1,6 @@
 # Connecto — API Contract
 
-**Status:** proposed v1 contract; not yet implemented. Existing backend endpoints are unversioned under `/api`; do not silently relabel them as compatible with this contract.
+**Status:** partial implementation. Existing backend endpoints remain under `/api`; the OTP bootstrap and self-profile slices are also available under `/api/v1` for compatibility and migration. Firebase exchange and revocable sessions are not yet implemented.
 
 ## Conventions
 
@@ -15,8 +15,9 @@
 | Area | Endpoint | Purpose / authorization |
 |---|---|---|
 | Auth | Firebase Phone Auth is initiated in the mobile client; `POST /auth/firebase/sessions`; `POST /auth/sessions/refresh`; `DELETE /auth/sessions/current` | Backend verifies the Firebase ID token before issuing/rotating/revoking the app session. Exchange endpoint rate-limited. Do not send raw OTPs to the app backend. |
+| Auth (implemented compatibility slice) | `POST /auth/send-otp`; `POST /auth/verify-otp` | Development/mock OTP only until Firebase exchange is configured. Verify returns `accessToken`, `expiresAt`, and a self-only user projection. Raw OTP debug values are never returned. |
 | Devices / notifications | `PUT /me/devices/{deviceId}/push-token`; `DELETE /me/devices/{deviceId}` | Authenticated self-device registration/removal; store token securely and never treat it as an authentication credential. |
-| Profile | `GET/PATCH /me`; `DELETE /me`; `POST /me/avatar-upload-intents` | Self-only; private upload intent, no arbitrary public URL. |
+| Profile | `GET/PATCH /me`; `DELETE /me`; `POST /me/avatar-upload-intents` | `GET/PATCH /me` are implemented for the authenticated principal. Avatar intents and account deletion remain pending approval/configuration. |
 | Discovery | `GET /discover?cursor=&language=&interest=`; `GET /profiles/{id}` | Public projection and visibility/blocks enforced. Nearby endpoint only after explicit approval. |
 | Connections | `POST /connections`; `GET /connections`; `POST /connections/{id}/accept`; `POST /connections/{id}/decline`; `DELETE /connections/{id}` | Actor from token; state-checked/idempotent. Exact consent requirement unresolved. |
 | Messaging | `GET /conversations`; `GET /conversations/{id}/messages?before=`; `POST /conversations/{id}/messages` | Participant-only; bounded body; rate-limited; safety enforcement. |

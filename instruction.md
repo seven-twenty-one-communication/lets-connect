@@ -20,6 +20,35 @@
 2. **NOT a Mental Health / Psychiatric Clinic:** Exclusively focused on social connection, everyday friendship, banter, and entertainment. No clinical or psychiatric diagnosis.
 3. **100% Privacy by Design:** 3D/AI avatars ensure neither host nor caller ever reveals personal cameras or real photos unless they choose to.
 
+### 1.1 Dual-Client Ecosystem & Recruitment Pipeline
+It is crucial to understand that `https://connecto.live/expert` is **NOT the mobile calling application itself**—it is a **public creator recruitment & lead capture portal** designed to enroll new hosts. Our project develops both clients side-by-side:
+
+```
+┌────────────────────────────────────────────────────────┐
+│     1. PUBLIC HOST ENROLLMENT PORTAL (Next.js /expert) │
+│  - Paid Ads & Creator Acquisition (Social Ads)         │
+│  - 5-Field Host Enrollment Form & Preferred Shifts     │
+│  - Earning Calculator & Value Proposition             │
+└───────────────────────────┬────────────────────────────┘
+                            │ Submits Lead
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│     2. BACKEND ONBOARDING PIPELINE (Spring Boot 3)     │
+│  - POST /api/v1/user/web/expert-leads                  │
+│  - Lead Validation, Status: PENDING_REVIEW             │
+│  - Operations review queue (AdminController)          │
+└───────────────────────────┬────────────────────────────┘
+                            │ Approved by Admin
+                            ▼
+┌────────────────────────────────────────────────────────┐
+│     3. CONNECTO MOBILE APP (React Native / Agora RTC)  │
+│  - Host logs in via Mobile Number                      │
+│  - Listener Mode activated; Sets per-minute coin rate   │
+│  - Goes Online / Receives 1-on-1 audio calls           │
+│  - Withdraws earnings directly via UPI                 │
+└────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 2. Benchmark Analysis: `connecto.live/expert` Learnings & Strategic Adaptations

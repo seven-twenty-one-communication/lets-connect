@@ -1,0 +1,2 @@
+ALTER TABLE call_sessions
+    ADD COLUMN IF NOT EXISTS last_billed_at TIMESTAMP WITH TIME ZONE;

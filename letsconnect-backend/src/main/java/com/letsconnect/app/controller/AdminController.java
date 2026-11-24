@@ -21,13 +21,47 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping({"/api/admin", "/api/v1/admin"})
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final ListenerProfileRepository listenerProfileRepository;
     private final UserRepository userRepository;
     private final UserReportRepository userReportRepository;
+    private final com.letsconnect.app.repository.ExpertLeadRepository expertLeadRepository;
+
+    @GetMapping("/leads")
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<com.letsconnect.app.model.entity.ExpertLead>> getExpertLeads(
+            @RequestParam(required = false) String status
+    ) {
+        if (status != null && !status.isBlank()) {
+            return ResponseEntity.ok(expertLeadRepository.findByStatusOrderByCreatedAtDesc(status, org.springframework.data.domain.Pageable.unpaged()).getContent());
+        }
+        return ResponseEntity.ok(expertLeadRepository.findAllByOrderByCreatedAtDesc(org.springframework.data.domain.Pageable.unpaged()).getContent());
+    }
+
+    @PatchMapping("/leads/{leadId}/status")
+    @Transactional
+    public ResponseEntity<?> updateLeadStatus(
+            @PathVariable UUID leadId,
+            @RequestBody Map<String, String> body
+    ) {
+        com.letsconnect.app.model.entity.ExpertLead lead = expertLeadRepository.findById(leadId).orElse(null);
+        if (lead == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String newStatus = body.get("status");
+        if (newStatus != null && !newStatus.isBlank()) {
+            lead.setStatus(newStatus.toUpperCase());
+        }
+        if (body.containsKey("notes")) {
+            lead.setNotes(body.get("notes"));
+        }
+        lead.setReviewedAt(java.time.ZonedDateTime.now());
+        expertLeadRepository.save(lead);
+        return ResponseEntity.ok(Map.of("leadId", leadId, "status", lead.getStatus()));
+    }
 
     @PatchMapping("/listeners/{userId}/kyc")
     @Transactional

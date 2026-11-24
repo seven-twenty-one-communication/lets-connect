@@ -2,7 +2,9 @@ package com.letsconnect.app.controller;
 
 import com.letsconnect.app.model.entity.User;
 import com.letsconnect.app.repository.UserRepository;
+import com.letsconnect.app.repository.AppSessionRepository;
 import com.letsconnect.app.service.AuthenticatedUser;
+import com.letsconnect.app.model.enums.UserStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -17,11 +19,38 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping({"/api/users", "/api/v1", "/api/v1/profiles"})
 @RequiredArgsConstructor
 public class UserProfileController {
     private final UserRepository userRepository;
     private final AuthenticatedUser authenticatedUser;
+    private final AppSessionRepository appSessionRepository;
+
+    @GetMapping("/me")
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getMe() {
+        return getProfile(authenticatedUser.currentUserId());
+    }
+
+    @PatchMapping("/me")
+    @Transactional
+    public ResponseEntity<?> updateMe(@Valid @RequestBody UpdateProfileRequest request) {
+        return updateProfile(authenticatedUser.currentUserId(), request);
+    }
+
+    @DeleteMapping("/me")
+    @Transactional
+    public ResponseEntity<?> deleteMe() {
+        UUID userId = authenticatedUser.currentUserId();
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        user.setStatus(UserStatus.SUSPENDED);
+        userRepository.save(user);
+        appSessionRepository.deleteByUser(user);
+        return ResponseEntity.ok(Map.of("status", "DELETION_REQUESTED"));
+    }
 
     @GetMapping("/{userId}")
     @Transactional(readOnly = true)

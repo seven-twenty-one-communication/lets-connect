@@ -4,7 +4,9 @@ import com.letsconnect.app.model.entity.User;
 import com.letsconnect.app.model.entity.Wallet;
 import com.letsconnect.app.repository.UserRepository;
 import com.letsconnect.app.repository.WalletRepository;
+import com.letsconnect.app.repository.AppSessionRepository;
 import com.letsconnect.app.service.OtpService;
+import com.letsconnect.app.service.AuthenticatedUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,8 @@ class AuthControllerTest {
     private UserRepository userRepository;
     private WalletRepository walletRepository;
     private OtpService otpService;
+    private AppSessionRepository appSessionRepository;
+    private AuthenticatedUser authenticatedUser;
     private AuthController controller;
 
     @BeforeEach
@@ -33,7 +37,15 @@ class AuthControllerTest {
         userRepository = mock(UserRepository.class);
         walletRepository = mock(WalletRepository.class);
         otpService = mock(OtpService.class);
-        controller = new AuthController(userRepository, walletRepository, otpService);
+        appSessionRepository = mock(AppSessionRepository.class);
+        authenticatedUser = mock(AuthenticatedUser.class);
+        controller = new AuthController(
+                userRepository,
+                walletRepository,
+                otpService,
+                appSessionRepository,
+                authenticatedUser
+        );
         ReflectionTestUtils.setField(
                 controller,
                 "jwtSecret",
@@ -78,5 +90,18 @@ class AuthControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         verifyNoInteractions(userRepository, walletRepository);
+    }
+
+    @Test
+    void sendOtpNeverReturnsDebugCredentials() {
+        when(otpService.sendOtp("+919876543210")).thenReturn("123456");
+        AuthController.SendOtpRequest request = new AuthController.SendOtpRequest();
+        request.setPhoneNumber("+919876543210");
+
+        var response = controller.sendOtp(request);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(!((java.util.Map<?, ?>) response.getBody()).containsKey("debugOtp"));
+        verify(otpService).sendOtp("+919876543210");
     }
 }

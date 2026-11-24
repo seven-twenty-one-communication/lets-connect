@@ -49,8 +49,8 @@ CREATE TABLE users (
     gender VARCHAR(20),                             -- Optional
     age_group VARCHAR(20),                          -- e.g. '18-24', '25-34', '35+'
     preferred_languages TEXT[] DEFAULT '{"English", "Hindi"}',
-    role user_role NOT NULL DEFAULT 'USER',
-    status user_status NOT NULL DEFAULT 'ACTIVE',
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
     device_token TEXT,                              -- FCM Token for push notifications / call ringing
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -97,7 +97,7 @@ CREATE TABLE listener_profiles (
     total_minutes_spoken BIGINT DEFAULT 0,
     
     -- Verification & KYC
-    kyc_status kyc_status NOT NULL DEFAULT 'NOT_SUBMITTED',
+    kyc_status VARCHAR(30) NOT NULL DEFAULT 'NOT_SUBMITTED',
     kyc_document_url TEXT,
     kyc_submitted_at TIMESTAMP WITH TIME ZONE,
     verified_at TIMESTAMP WITH TIME ZONE,
@@ -157,7 +157,7 @@ CREATE TABLE coin_transactions (
     user_id UUID NOT NULL REFERENCES users(id),
     amount BIGINT NOT NULL,                         -- Can be positive (credit) or negative (debit)
     balance_after BIGINT NOT NULL,
-    transaction_type transaction_type NOT NULL,
+    transaction_type VARCHAR(30) NOT NULL,
     reference_id VARCHAR(100),                      -- call_session_id or Google Play order_id
     description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -177,13 +177,14 @@ CREATE TABLE call_sessions (
     listener_id UUID NOT NULL REFERENCES users(id),
     category_id INT REFERENCES categories(id),
     
-    status call_status NOT NULL DEFAULT 'INITIATED',
+    status VARCHAR(30) NOT NULL DEFAULT 'INITIATED',
     rate_per_minute_coins INT NOT NULL,
     
     -- Timestamps
     initiated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     ringing_at TIMESTAMP WITH TIME ZONE,
     connected_at TIMESTAMP WITH TIME ZONE,
+    last_billed_at TIMESTAMP WITH TIME ZONE,
     ended_at TIMESTAMP WITH TIME ZONE,
     duration_seconds INT DEFAULT 0,
     
@@ -192,7 +193,7 @@ CREATE TABLE call_sessions (
     listener_coins_earned BIGINT DEFAULT 0,
     platform_commission_coins BIGINT DEFAULT 0,
     
-    disconnect_reason disconnect_reason,
+    disconnect_reason VARCHAR(30),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -223,12 +224,12 @@ CREATE INDEX idx_reviews_listener ON call_reviews(listener_id);
 CREATE TABLE user_blocks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     blocker_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    blocked_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    blocked_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (blocker_id, blocked_user_id)
+    UNIQUE (blocker_id, blocked_id)
 );
 
-CREATE TABLE abuse_reports (
+CREATE TABLE user_reports (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     reporter_id UUID NOT NULL REFERENCES users(id),
     reported_user_id UUID NOT NULL REFERENCES users(id),
@@ -254,7 +255,7 @@ CREATE TABLE payout_requests (
     amount_inr NUMERIC(10,2) NOT NULL,
     payout_method VARCHAR(30) NOT NULL,             -- 'UPI' or 'BANK_TRANSFER'
     payout_details JSONB NOT NULL,
-    status payout_status NOT NULL DEFAULT 'REQUESTED',
+    status VARCHAR(30) NOT NULL DEFAULT 'REQUESTED',
     payout_reference VARCHAR(100),                  -- Bank UTR / RazorpayX Transfer ID
     rejection_reason TEXT,
     processed_at TIMESTAMP WITH TIME ZONE,
@@ -263,6 +264,15 @@ CREATE TABLE payout_requests (
 
 CREATE INDEX idx_payout_listener ON payout_requests(listener_id);
 CREATE INDEX idx_payout_status ON payout_requests(status);
+
+CREATE TABLE IF NOT EXISTS app_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    refresh_token_hash VARCHAR(64) NOT NULL UNIQUE,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    revoked_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
 
 -- ============================================================================
 -- 10. VIRTUAL GIFTS TABLE (In-Call Listener Tipping & Appreciation)

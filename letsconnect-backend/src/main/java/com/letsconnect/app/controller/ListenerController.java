@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/listeners")
+@RequestMapping({"/api/listeners", "/api/v1/listeners"})
 @RequiredArgsConstructor
 public class ListenerController {
 

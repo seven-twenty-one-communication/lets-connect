@@ -45,7 +45,7 @@ Connection transition + outbox; call initiation + availability claim + event out
 
 ## Existing schema gap
 
-The current SQL has `wallets.coin_balance` and `earned_coins_balance`, plus `coin_transactions`; this provides history but not a double-entry accounting journal. Current JPA config uses `ddl-auto: update`. Migration to the target must reconcile legacy balances from verified transaction history, create opening-balance journal entries with auditable provenance, compare sums, and only then switch reads/writes. Do not drop legacy data before reconciliation and rollback window closure.
+The current SQL has `wallets.coin_balance` and `earned_coins_balance`, plus `coin_transactions`; this provides history but not a double-entry accounting journal. Production JPA validation and Flyway migrations are the baseline; the H2-only dev profile has schema recreation for local isolation. Migration to the target accounting model must reconcile legacy balances from verified transaction history, create opening-balance journal entries with auditable provenance, compare sums, and only then switch reads/writes. Do not drop legacy data before reconciliation and rollback window closure.
 
 ## Migration and privacy strategy
 

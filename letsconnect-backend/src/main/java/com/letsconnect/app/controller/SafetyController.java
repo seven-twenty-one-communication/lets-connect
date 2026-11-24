@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/safety")
+@RequestMapping({"/api/safety", "/api/v1/safety"})
 @RequiredArgsConstructor
 public class SafetyController {
     private final UserRepository userRepository;

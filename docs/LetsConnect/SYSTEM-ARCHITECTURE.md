@@ -4,13 +4,13 @@
 
 ## Stack assessment and constraints
 
-Retain Flutter/Dart Android, Java 21/Spring Boot, Spring Security/JPA, PostgreSQL, STOMP/WebSocket, and the existing Agora integration as baseline. Evaluate (do not assume migration to) LiveKit/WebRTC. Redis is present as a dependency; use it only for explicitly designed ephemeral state/cache/coordination. Do not add Kafka absent demonstrated asynchronous throughput or durability requirements. No existing admin web stack exists; choose one after admin scope and team constraints are approved.
+Retain React Native/TypeScript Android, Java 21/Spring Boot, Spring Security/JPA, PostgreSQL, STOMP/WebSocket, and the existing Agora integration as baseline. Evaluate (do not assume migration to) LiveKit/WebRTC. Redis is present as a dependency; use it only for explicitly designed ephemeral state/cache/coordination. Do not add Kafka absent demonstrated asynchronous throughput or durability requirements. Next.js is the separate admin web foundation.
 
 ## Context diagram
 
 ```mermaid
 flowchart LR
-  U[Connecto Flutter app: User / Host] -->|HTTPS REST v1| API[Spring Boot modular monolith]
+  U[Connecto React Native app: User / Host] -->|HTTPS REST v1| API[Spring Boot modular monolith]
   U -->|WSS STOMP signaling| API
   A[Responsive Admin Web app] -->|HTTPS REST v1| API
   API --> PG[(PostgreSQL)]

@@ -11,7 +11,7 @@ Build Connecto's own brand, visual design, and implementation. Do not copy prote
 ## Target users and roles
 
 - **User:** creates an account/profile, discovers people, and uses approved communication features.
-- **Host:** a role in the same Flutter app for users who opt into host capabilities, if the role and its requirements are approved.
+- **Host:** a role in the same React Native app for users who opt into host capabilities, if the role and its requirements are approved.
 - **Moderator/admin:** uses a separate responsive web client with least-privilege permissions. Existing backend admin scope is limited to listener KYC status and reports.
 - **Operator/support:** operational role to be defined; no unrestricted production database access is implied.
 
@@ -21,7 +21,7 @@ Identity and session; profiles and privacy; discovery and connections; messaging
 
 ## Existing repository baseline
 
-- Flutter Android app in `mobile/`, with Agora RTC dependency and early login/discovery/call/chat screens.
+- React Native Android app in `letsconnect-mobile/`, with Agora RTC dependencies and a foundation screen.
 - Java 21 / Spring Boot 3.3.5 backend, JPA, Spring Security, PostgreSQL, STOMP/WebSocket, Redis dependency, and Agora services.
 - SQL schema/seeds and Docker Compose for PostgreSQL and Redis.
 - Existing backend APIs cover OTP, profiles, listeners, calls, wallet/purchases, chat, rooms, gifts, safety, and limited admin operations.

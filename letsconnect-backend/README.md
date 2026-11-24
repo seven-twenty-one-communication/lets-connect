@@ -7,7 +7,7 @@ Spring Boot REST and STOMP backend for LetsConnect voice conversations. The loca
 From this directory in PowerShell:
 
 ```powershell
-mvn "-Dspring-boot.run.profiles=dev" spring-boot:run
+.\gradlew.bat bootRun --args='--spring.profiles.active=dev'
 ```
 
 The dev database and seeded categories, gifts, and coin packages are reset when the process stops. The fixed OTP is `123456`; it expires after five minutes and is single-use. Authenticate with the JWT returned by `/api/auth/verify-otp` and send it as `Authorization: Bearer <token>` for every other API.
@@ -36,5 +36,5 @@ The dev profile does not send SMS, connect audio, or verify a real Play purchase
 ## Tests
 
 ```powershell
-mvn test
+.\gradlew.bat test --no-daemon
 ```

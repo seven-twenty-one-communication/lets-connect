@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 1. PostgreSQL Database
   postgres:
@@ -7,9 +5,9 @@ services:
     container_name: letsconnect-postgres
     restart: always
     environment:
-      POSTGRES_DB: letsconnect_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: ${DB_NAME:-letsconnect_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgrespassword}
     ports:
       - "5432:5432"
     volumes:

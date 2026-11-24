@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/wallet")
+@RequestMapping({"/api/wallet", "/api/v1/me/wallet"})
 @RequiredArgsConstructor
 public class WalletController {
 
@@ -32,6 +32,16 @@ public class WalletController {
     @GetMapping("/{userId}/balance")
     public ResponseEntity<Map<String, Object>> getBalance(@PathVariable UUID userId) {
         authenticatedUser.require(userId);
+        Long balance = walletService.getBalance(userId);
+        return ResponseEntity.ok(Map.of(
+                "userId", userId,
+                "coinBalance", balance
+        ));
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getMyWallet() {
+        UUID userId = authenticatedUser.currentUserId();
         Long balance = walletService.getBalance(userId);
         return ResponseEntity.ok(Map.of(
                 "userId", userId,
@@ -56,6 +66,16 @@ public class WalletController {
     @GetMapping("/{userId}/transactions")
     public ResponseEntity<List<Map<String, Object>>> getTransactions(@PathVariable UUID userId) {
         authenticatedUser.require(userId);
+        List<Map<String, Object>> transactions = coinTransactionRepository
+                .findByUserIdOrderByCreatedAtDesc(userId).stream()
+                .map(this::transactionResponse)
+                .toList();
+        return ResponseEntity.ok(transactions);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<List<Map<String, Object>>> getMyTransactions() {
+        UUID userId = authenticatedUser.currentUserId();
         List<Map<String, Object>> transactions = coinTransactionRepository
                 .findByUserIdOrderByCreatedAtDesc(userId).stream()
                 .map(this::transactionResponse)

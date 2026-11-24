@@ -20,7 +20,7 @@ Phase 00 must approve target market, age gate/legal approach, identity provider,
 
 ## 5. Architecture and design decisions
 
-Backend identity/profile modules in existing Spring Boot monolith; Flutter secure session repository, typed API client, environment-based API URL. Flutter uses Firebase Phone Authentication and submits its Firebase ID token to a backend exchange endpoint. Backend verifies the token and verified phone, resolves/creates the account, then issues the app's own session; user is principal and roles are server-assigned. New API namespace `/api/v1`.
+Backend identity/profile modules in existing Spring Boot monolith; React Native secure session repository, typed API client, environment-based API URL. React Native uses Firebase Phone Authentication and submits its Firebase ID token to a backend exchange endpoint. Backend verifies the token and verified phone, resolves/creates the account, then issues the app's own session; user is principal and roles are server-assigned. New API namespace `/api/v1`.
 
 ## 6. Database entities and relationships
 

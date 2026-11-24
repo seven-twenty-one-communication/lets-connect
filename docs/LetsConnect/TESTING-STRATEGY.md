@@ -2,7 +2,7 @@
 
 ## Test pyramid and environments
 
-Unit tests for domain rules; repository/database integration tests against PostgreSQL-compatible behavior; API/WebSocket contract tests; Flutter widget/unit tests; device E2E for OTP-to-call; provider sandbox tests; load, security, resilience and operational drills. H2-only tests are insufficient for PostgreSQL locking/index/transaction behavior. Separate local, CI, staging and production credentials/data; production user data is never copied unredacted into lower environments.
+Unit tests for domain rules; repository/database integration tests against PostgreSQL-compatible behavior; API/WebSocket contract tests; React Native unit/component tests; device E2E for OTP-to-call; provider sandbox tests; load, security, resilience and operational drills. H2-only tests are insufficient for PostgreSQL locking/index/transaction behavior. Separate local, CI, staging and production credentials/data; production user data is never copied unredacted into lower environments.
 
 ## Unit tests
 

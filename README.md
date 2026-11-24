@@ -1,6 +1,6 @@
 # LetsConnect — Voice Calling & Emotional Connection Platform
 
-A production-ready social friendship and real-time audio calling platform built with **Flutter** (Android) and **Spring Boot** (Java 21), featuring ultra-low-latency VoIP calling, real-time WebSocket signaling, and per-minute coin billing.
+A React Native, Spring Boot, PostgreSQL and Agora social friendship and real-time audio calling application.
 
 ---
 
@@ -15,16 +15,15 @@ lets-connect/
 │   │   ├── model/                # JPA Entities (User, ListenerProfile, CallSession, Wallet, etc.)
 │   │   ├── repository/           # Spring Data JPA repositories with pessimistic locking
 │   │   └── service/              # Agora Token007, Billing Scheduler, Signaling, In-App Purchase
-│   ├── pom.xml
+│   ├── build.gradle.kts
 │   └── src/main/resources/application.yml
-├── letsconnect-mobile/           # Flutter Android Application (Dart / Material 3)
-│   ├── lib/
-│   │   ├── models/               # Category, Listener, CallSession data models
-│   │   ├── screens/              # Login, Home Discovery, Call HUD, Incoming Call, Chat
-│   │   ├── services/             # ApiService, AgoraAudioService, SessionStore
-│   │   ├── theme/                # AppColors (Cozy dark theme)
-│   │   └── main.dart
-│   └── pubspec.yaml
+├── letsconnect-mobile/           # React Native Android Application (TypeScript)
+│   ├── src/api/                  # Typed API client and interceptors
+│   ├── src/theme/                # Application colors
+│   ├── src/types/                # Shared TypeScript types
+│   └── App.tsx
+├── letsconnect-admin/            # Next.js admin foundation
+│   └── app/
 ├── letsconnect-database/         # PostgreSQL Schema & Seed Data
 │   ├── schema.sql                # Production schema (Wallets, Sessions, KYC, Helplines, etc.)
 │   └── seed_data.sql             # Categories, Google Play coin packs, Helplines, Gifts
@@ -32,10 +31,6 @@ lets-connect/
 │   └── LetsConnect/              # Full production roadmap and technical documents
 └── docker-compose.yml            # Local PostgreSQL 16 & Redis 7 container orchestration
 ```
-
-> **Note on Flutter SDK**: The Flutter SDK is kept externally at `C:\Apoorv_Project_Data\flutter-sdk` to keep the application repository lightweight and clean.
-
----
 
 ## 🚀 Running the Project
 
@@ -48,14 +43,13 @@ docker compose up -d
 ### 2. Spring Boot Backend
 ```bash
 cd letsconnect-backend
-mvn clean compile
-mvn spring-boot:run
+.\gradlew.bat bootRun
 ```
 *API runs on `http://localhost:8080`*
 
-### 3. Flutter Mobile App
+### 3. React Native Mobile App
 ```bash
 cd letsconnect-mobile
-flutter pub get
-flutter run
+npm install
+npm run android
 ```

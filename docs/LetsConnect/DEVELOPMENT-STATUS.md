@@ -19,11 +19,11 @@
 
 ## Repository baseline (not production-ready declaration)
 
-Evidence inventory is in [PROJECT-OVERVIEW.md](PROJECT-OVERVIEW.md) and [REFERENCE-APP-EVIDENCE.md](REFERENCE-APP-EVIDENCE.md). Existing modules are represented in code, but mock/demo mobile behavior, unconfigured real integrations, mutable-balance accounting, `ddl-auto: update`, absent admin web frontend/migration pipeline, and limited end-to-end tests are blockers to production use.
+Evidence inventory is in [PROJECT-OVERVIEW.md](PROJECT-OVERVIEW.md) and [REFERENCE-APP-EVIDENCE.md](REFERENCE-APP-EVIDENCE.md). Existing modules are represented in code, but mock/demo behavior, unconfigured real integrations, mutable-balance accounting, the H2-only dev schema policy, absent production auth/migration pipeline and limited end-to-end tests are blockers to production use.
 
 ## Current implementation evidence
 
-The Phase 01 implementation has started with a limited authentication slice: Flutter stores the backend-issued access token and user ID using OS-backed secure storage, restores a saved session at startup, and attaches its bearer token to authenticated API requests. Newly provisioned backend accounts receive no promotional balance and no assumed preferred languages. Focused backend tests pass. Mobile secure-session tests have been added but could not be run in the current environment because the Flutter SDK is not available on `PATH`.
+The Phase 01 implementation has started with a limited foundation slice: React Native has a typed API client, Keychain-backed access-token helpers, environment-based API configuration, and OTP/session restore UI. The backend exposes compatibility `/api/v1/auth/send-otp`, `/api/v1/auth/verify-otp`, and authenticated `GET/PATCH /api/v1/me`. This is not a complete authentication or session flow. Firebase exchange, refresh/revoke, account lifecycle and mobile E2E remain incomplete. Focused backend tests and mobile/admin TypeScript/lint checks pass.
 
 This is not a complete or production-ready authentication flow. Firebase Phone Authentication and FCM are selected directions but are not configured or integrated; the current OTP delivery path is not production-ready. Backend Firebase ID-token verification/exchange, app session refresh/revocation, push-token lifecycle, complete server-side authorization, profile, account lifecycle, database migrations, and end-to-end tests remain incomplete. Existing call, wallet, and discovery demo behavior remains out of scope for this slice.
 

@@ -48,7 +48,7 @@ jobs:
           cache-dependency-path: letsconnect-admin/package.json
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Type Check & Lint
         run: npm run type-check
@@ -71,7 +71,7 @@ jobs:
           cache-dependency-path: letsconnect-mobile/package.json
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: TypeScript Check
         run: npm run type-check

@@ -8,11 +8,11 @@ Create original Connecto branding and visual assets; do not reproduce the refere
 
 ## Navigation and screen inventory (proposed; validate against reference)
 
-### User surface (Flutter)
+### User surface (React Native)
 
 Authentication/consent; profile setup/avatar; discovery/search/filters; profile detail; connections; conversation list/chat; incoming/outgoing call; active call; voice room browse/room; history; notifications; wallet/payment only if approved; report/block; privacy/account settings/deletion.
 
-### Host role (same Flutter app)
+### Host role (same React Native app)
 
 Host application/status (only if approved); profile/availability; incoming call; active call; earnings/payout history only if financial model approved; notifications and safety. Role switch and host eligibility must be explicit, not hidden.
 

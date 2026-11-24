@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS users (
     gender VARCHAR(20),
     age_group VARCHAR(20),
     preferred_languages TEXT[] DEFAULT '{"English", "Hindi"}',
-    role user_role NOT NULL DEFAULT 'USER',
-    status user_status NOT NULL DEFAULT 'ACTIVE',
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
     device_token TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS listener_profiles (
     total_minutes_spoken BIGINT DEFAULT 0,
     
     -- Verification & Payout Compliance (for withdrawals)
-    kyc_status kyc_status NOT NULL DEFAULT 'NOT_SUBMITTED',
+    kyc_status VARCHAR(30) NOT NULL DEFAULT 'NOT_SUBMITTED',
     kyc_document_url TEXT,
     kyc_submitted_at TIMESTAMP WITH TIME ZONE,
     verified_at TIMESTAMP WITH TIME ZONE,
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS coin_transactions (
     user_id UUID NOT NULL REFERENCES users(id),
     amount BIGINT NOT NULL,
     balance_after BIGINT NOT NULL,
-    transaction_type transaction_type NOT NULL,
+    transaction_type VARCHAR(30) NOT NULL,
     reference_id VARCHAR(100),
     description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -212,13 +212,14 @@ CREATE TABLE IF NOT EXISTS call_sessions (
     listener_id UUID NOT NULL REFERENCES users(id),
     category_id INT REFERENCES categories(id),
     
-    status call_status NOT NULL DEFAULT 'INITIATED',
+    status VARCHAR(30) NOT NULL DEFAULT 'INITIATED',
     rate_per_minute_coins INT NOT NULL,
     
     -- Timestamps
     initiated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     ringing_at TIMESTAMP WITH TIME ZONE,
     connected_at TIMESTAMP WITH TIME ZONE,
+    last_billed_at TIMESTAMP WITH TIME ZONE,
     ended_at TIMESTAMP WITH TIME ZONE,
     duration_seconds INT DEFAULT 0,
     
@@ -227,7 +228,7 @@ CREATE TABLE IF NOT EXISTS call_sessions (
     listener_coins_earned BIGINT DEFAULT 0,
     platform_commission_coins BIGINT DEFAULT 0,
     
-    disconnect_reason disconnect_reason,
+    disconnect_reason VARCHAR(30),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -258,12 +259,12 @@ CREATE INDEX IF NOT EXISTS idx_reviews_listener ON call_reviews(listener_id);
 CREATE TABLE IF NOT EXISTS user_blocks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     blocker_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    blocked_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    blocked_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (blocker_id, blocked_user_id)
+    UNIQUE (blocker_id, blocked_id)
 );
 
-CREATE TABLE IF NOT EXISTS abuse_reports (
+CREATE TABLE IF NOT EXISTS user_reports (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     reporter_id UUID NOT NULL REFERENCES users(id),
     reported_user_id UUID NOT NULL REFERENCES users(id),
@@ -276,8 +277,8 @@ CREATE TABLE IF NOT EXISTS abuse_reports (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_abuse_reported ON abuse_reports(reported_user_id);
-CREATE INDEX IF NOT EXISTS idx_abuse_status ON abuse_reports(status);
+CREATE INDEX IF NOT EXISTS idx_user_reported ON user_reports(reported_user_id);
+CREATE INDEX IF NOT EXISTS idx_user_report_status ON user_reports(status);
 
 -- ============================================================================
 -- 8. LISTENER PAYOUT REDEMPTIONS TABLE
@@ -289,7 +290,7 @@ CREATE TABLE IF NOT EXISTS payout_requests (
     amount_inr NUMERIC(10,2) NOT NULL,
     payout_method VARCHAR(30) NOT NULL,
     payout_details JSONB NOT NULL,
-    status payout_status NOT NULL DEFAULT 'REQUESTED',
+    status VARCHAR(30) NOT NULL DEFAULT 'REQUESTED',
     payout_reference VARCHAR(100),
     rejection_reason TEXT,
     processed_at TIMESTAMP WITH TIME ZONE,

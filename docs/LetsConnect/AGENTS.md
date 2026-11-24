@@ -6,9 +6,9 @@ Before any work, read this file, `DEVELOPMENT-STATUS.md`, `REFERENCE-APP-EVIDENC
 
 ## Architecture restrictions
 
-- Preserve existing Flutter Android, Java 21/Spring Boot modular monolith, PostgreSQL and Agora baseline. Do not replace frameworks or split services without an approved decision.
+- Preserve the React Native Android baseline, Java 21/Spring Boot modular monolith, PostgreSQL and Agora baseline. Do not replace frameworks or split services without an approved decision.
 - Do not add Kafka or a distributed broker absent a demonstrated requirement and approved ADR.
-- Keep Host as a role in the same Flutter app; admin web is separate. No admin stack selected yet.
+- Keep Host as a role in the same React Native app; admin web is separate in Next.js.
 - Keep APIs versioned under `/api/v1` for new contracts; document adapters/deprecations before changing unversioned routes.
 - Use reviewed forward migrations; disable Hibernate schema mutation in production. Never edit a deployed migration or destructively change data without an approved recovery plan.
 
